@@ -192,8 +192,13 @@ export async function adjustTemperature() {
   }
 }
 
-export async function GET(request: NextRequest) {
-  const authHeader = request.headers.get("authorization");
 
-  return Response.json({ success: true });
+export async function GET(request: NextRequest) {
+  try {
+    await adjustTemperature();
+    return Response.json({ success: true });
+  } catch (error) {
+    console.error("Error in temperature adjustment cron job:", error);
+    return new Response("Internal server error", { status: 500 });
+  }
 }
