@@ -194,15 +194,6 @@ export async function adjustTemperature() {
 
 export async function GET(request: NextRequest) {
   const authHeader = request.headers.get("authorization");
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    return new Response("Unauthorized", { status: 401 });
-  } else {
-    try {
-      await adjustTemperature();
-    } catch (error) {
-      console.error("Error in temperature adjustment cron job:", error);
-      return new Response("Internal server error", { status: 500 });
-    }
-  }
+
   return Response.json({ success: true });
 }
